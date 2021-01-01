@@ -1,0 +1,7 @@
+#!/usr/bin/with-contenv bash
+
+echo "$CRON_FETCH_PACKAGES  build fetch-pkgs 2>&1 | dlog" > /etc/cron.d/fetch-packages
+echo "$CRON_AUR_SYNC_UPDATE build aur-check 2>&1 | dlog" > /etc/cron.d/aur-sync-update
+echo "$CRON_PACCACHE_CLEAN  root  paccache -r 2>&1 | dlog" > /etc/cron.d/paccache-clean
+
+chmod 0644 /etc/cron.d/*

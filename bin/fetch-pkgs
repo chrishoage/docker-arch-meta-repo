@@ -1,0 +1,27 @@
+#!/usr/bin/with-contenv bash
+
+exec 3>/tmp/arch-packages.local
+flock --exclusive --nonblock 3 || {
+  echo 1>&2 "stopping $0 because a task is already running"
+  exit 1
+}
+
+cd /config/packages
+
+[[ "$DEBUG_ARCH_REPOS" == "1" ]] && echo "Checking $PACKAGE_REPO for updates"
+
+git fetch
+
+LOCAL=$(git rev-parse HEAD)
+REMOTE=$(git rev-parse @{u})
+PKG_COUNT=$(aur repo -d $REPO_NAME --list | wc -l)
+
+# when the remote updates or during the first run of the cotnainer
+# update the remote and sync any new AUR packages while building
+# updated packages
+if [[ $LOCAL != $REMOTE || $PKG_COUNT -eq 0 ]]; then
+    [[ "$DEBUG_ARCH_REPOS" == "1" ]] && echo "Updates found..."
+    make-pkgs
+else
+  [[ "$DEBUG_ARCH_REPOS" == "1" ]] && echo "No new changes"
+fi

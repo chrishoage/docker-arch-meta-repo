@@ -1,0 +1,12 @@
+#!/bin/bash
+
+mkfifo --mode=0666 /tmp/logging-fifo
+
+trap 'rm -f /tmp/logging-fifo' EXIT
+
+while true
+do
+  while read -r line; do
+    echo $line
+  done < /tmp/logging-fifo
+done

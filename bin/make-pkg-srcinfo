@@ -1,0 +1,11 @@
+#!/usr/bin/with-contenv bash
+
+set -e
+
+for dir in /config/packages/*/; do
+  (
+    cd "$dir"
+    [[ "$DEBUG_ARCH_REPOS" == "1" ]] && echo "Making $dir.SRCINFO"
+    makepkg --printsrcinfo > .SRCINFO
+  )
+done

@@ -1,0 +1,9 @@
+#!/usr/bin/with-contenv bash
+
+set -e
+
+srcinfo-deps /config/packages/*/.SRCINFO \
+    | sort \
+    | uniq \
+    | aur query -t info \
+    | jq '.results[].Name' -r

@@ -1,0 +1,30 @@
+#!/usr/bin/with-contenv bash
+set -e
+
+exec 3< "$(readlink -m "$0")"
+flock --exclusive --nonblock 3 || {
+  echo 1>&2 "$0 already running"
+  exit 1
+}
+
+(
+  [[ "$DEBUG_ARCH_REPOS" == "1" ]] && echo "Pulling latest packages"
+  cd /config/packages
+  git pull --rebase
+)
+
+# add aurutils to local repo to ensure it is kept up to date
+[[ "$DEBUG_ARCH_REPOS" == "1" ]] && echo "Adding aurutils to $REPO_NAME"
+aur-sync aurutils
+
+# Create .SRCINFO to be used for AUR deps and build order
+[[ "$DEBUG_ARCH_REPOS" == "1" ]] && echo "Running make-pkg-srcinfo"
+make-pkg-srcinfo
+
+# Fetch the AUR deps from the .SRCINFO and pass them to aur sync
+[[ "$DEBUG_ARCH_REPOS" == "1" ]] && echo "Running fetch-pkg-aur-deps | xargs aur-sync"
+fetch-pkg-aur-deps | xargs aur-sync
+
+# Now that we have all AUR deps in our custom repo we can build the meta pckages
+[[ "$DEBUG_ARCH_REPOS" == "1" ]] && echo "Running build-pkgs"
+build-pkgs

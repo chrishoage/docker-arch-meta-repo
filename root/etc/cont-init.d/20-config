@@ -1,0 +1,57 @@
+#!/usr/bin/with-contenv bash
+
+echo "setting up  /config/repo"
+mkdir -p /config/repo
+repo_db=/config/repo/$REPO_NAME.db.tar.zst
+
+if [ ! -f $repo_db ]; then
+  repo-add $repo_db
+fi
+
+pacman_conf=/etc/pacman.d/$REPO_NAME.conf
+
+if [ ! -f $pacman_conf ]; then
+  echo "setting up $pacman_conf"
+  echo "\
+[options]
+CacheDir = /var/cache/pacman/pkg
+CacheDir = /config/repo
+CleanMethod = KeepCurrent
+
+[$REPO_NAME]
+SigLevel = Optional TrustAll
+Server = file:///config/repo
+" > $pacman_conf
+fi
+
+chroot_pacman_conf=/etc/aurutils/pacman-$REPO_NAME.conf
+
+if [ ! -f $chroot_pacman_conf ]; then
+  echo "setting up $chroot_pacman_conf"
+  cp /usr/share/devtools/pacman-extra.conf $chroot_pacman_conf
+  echo "\
+[$REPO_NAME]
+SigLevel = Optional TrustAll
+Server = file:///config/repo
+" >> $chroot_pacman_conf
+fi
+
+pacsync $REPO_NAME
+
+chown -R build:build /config
+
+echo "setting up /config/packages"
+
+if [ ! -d /config/packages ]; then
+  (
+    cd /config
+    GIT_SSH_COMMAND="ssh -o 'StrictHostKeyChecking=accept-new'" \
+    HOME=$(echo ~build) \
+    sudo -u build -E git clone $PACKAGE_REPO packages
+  )
+
+  if [ $? -gt 0 ]; then
+    echo "failed to check out $PACKAGE_REPO"
+    exit 1
+  fi
+fi

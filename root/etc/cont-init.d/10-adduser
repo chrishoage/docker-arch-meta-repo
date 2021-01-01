@@ -1,0 +1,24 @@
+#!/usr/bin/with-contenv bash
+
+PUID=${PUID:-911}
+PGID=${PGID:-911}
+
+groupmod -o -g "$PGID" build
+usermod -o -u "$PUID" build
+usermod -d /config build
+cp --no-clobber --recursive /var/cache/build/. /config
+
+echo '
+-------------------------------------
+GID/UID
+-------------------------------------'
+echo "
+User uid:    $(id -u build)
+User gid:    $(id -g build)
+-------------------------------------
+"
+
+HOME=$(echo ~build)
+
+chown -R build:build /config
+chown -R build:build $HOME

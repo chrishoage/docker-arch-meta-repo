@@ -1,0 +1,15 @@
+#!/usr/bin/with-contenv bash
+
+HOME=$(echo ~build)
+
+[[ "$DEBUG_ARCH_REPOS" == "1" ]] && echo "running HOME=$HOME aur sync -d $REPO_NAME $@"
+
+export HOME
+
+aur sync -d $REPO_NAME \
+  --remove \
+  --noconfirm \
+  --noview \
+  --temp \
+  --chroot \
+  "$@"

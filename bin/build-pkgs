@@ -1,0 +1,5 @@
+#!/usr/bin/with-contenv bash
+
+cd /config/packages
+
+aur-build -a <(aur graph /config/packages/*/.SRCINFO | tsort | tac) "$@"

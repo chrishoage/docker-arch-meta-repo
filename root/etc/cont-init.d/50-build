@@ -1,0 +1,5 @@
+#!/usr/bin/with-contenv bash
+
+if [ "$BUILD_PACKAGES_ON_START" == "1" ]; then
+  sudo -E -u build make-pkgs
+fi

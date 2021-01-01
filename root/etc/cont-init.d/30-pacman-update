@@ -1,0 +1,7 @@
+#!/usr/bin/with-contenv sh
+
+set -e
+
+# 20-config must set up custom repo for update to work
+
+pacman -Syu --noconfirm --quiet
