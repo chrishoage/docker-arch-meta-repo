@@ -43,7 +43,7 @@ RUN \
     && gpg --recv-keys DBE7D3DD8C81D58D0A13D0E76BC26A17B9B7018A \
     && tar xzf /tmp/aurutils.tar.gz \
     && cd aurutils \
-    && makepkg --noconfirm -rsci \
+    && makepkg --noconfirm --rmdeps -rsci \
     && cd .. \
     && rm -rf aurutils aurutils.tar.gz
 
@@ -58,7 +58,9 @@ RUN \
     && rm /tmp/s6-overlay-amd64.tar.gz
 
 RUN \
-    echo "setting up extra pacman config" \
+    echo "cleaning pacman cache" \
+    && paccache --keep 0 --remove \
+    && echo "setting up extra pacman config" \
     && echo "Include = /etc/pacman.d/*.conf" >> /etc/pacman.conf
 
 COPY root /
