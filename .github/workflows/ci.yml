@@ -23,8 +23,6 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
-          version: latest
           tags: ghcr.io/chrishoage/arch-meta-repo:latest
-          tag_with_ref: true
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
