@@ -11,6 +11,7 @@ While offering some customization, this is for my own personal use. You probably
 - `BUILD_PACKAGES_ON_START` `0` / `1` forces a build when container starts
 - `REPO_NAME` the name of the custom repo. Default is `custom`
 - `PACKAGE_REPO` *Required* git path to meta packages
+- `PACMAN_CACHE_SERVER` Local mirror cache like flexo
 - `CRON_FETCH_PACKAGES` Interval to fetch meta packages. Defaults to 15 minutes
 - `CRON_AUR_SYNC_UPDATE` Interval to update AUR packages. Defaults to every hours
 - `CRON_PACCACHE_CLEAN` Interval to clear pacman cache. Defaults to once a week on Monday at 8am container time
