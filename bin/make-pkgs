@@ -13,9 +13,11 @@ flock --exclusive --nonblock 3 || {
   HOME=$(echo ~build) git pull --rebase
 )
 
-# add aurutils to local repo to ensure it is kept up to date
-[[ "$DEBUG_ARCH_REPOS" == "1" ]] && echo "Adding aurutils to $REPO_NAME"
-aur-sync aurutils
+if ! aur repo --list | cut -f1 | grep -q aurutils; then
+  # add aurutils to local repo to ensure it is kept up to date
+  [[ "$DEBUG_ARCH_REPOS" == "1" ]] && echo "Adding aurutils to $REPO_NAME"
+  aur-sync aurutils
+fi
 
 # Create .SRCINFO to be used for AUR deps and build order
 [[ "$DEBUG_ARCH_REPOS" == "1" ]] && echo "Running make-pkg-srcinfo"
