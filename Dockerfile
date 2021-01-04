@@ -15,6 +15,7 @@ ENV LANG=C \
     PACKAGE_REPO="" \
     DEBUG_ARCH_REPOS="0" \
     BUILD_PACKAGES_ON_START="0" \
+    PACMAN_CACHE_SERVER="" \
     # Every 15 Minutes
     CRON_FETCH_PACKAGES="*/15 * * * *" \
     # Every hour on minute 3

@@ -1,5 +1,10 @@
 #!/usr/bin/with-contenv bash
 
+if [[ "$PACMAN_CACHE_SERVER" != "" ]]; then
+  echo "setting up $PACMAN_CACHE_SERVER"
+  echo "Server = $PACMAN_CACHE_SERVER" > /etc/pacman.d/mirrorlist
+fi
+
 echo "setting up  /config/repo"
 mkdir -p /config/repo
 repo_db=/config/repo/$REPO_NAME.db.tar.zst
