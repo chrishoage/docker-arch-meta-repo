@@ -3,3 +3,6 @@
 cd /config/packages
 
 aur-build -a <(aur graph /config/packages/*/.SRCINFO | tsort | tac) "$@"
+
+# Clean pckage log files
+find /config/packages -name '*package*.log' -type f -exec rm '{}' \;
