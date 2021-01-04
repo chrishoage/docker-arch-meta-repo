@@ -10,7 +10,7 @@ flock --exclusive --nonblock 3 || {
 (
   [[ "$DEBUG_ARCH_REPOS" == "1" ]] && echo "Pulling latest packages"
   cd /config/packages
-  git pull --rebase
+  HOME=$(echo ~build) git pull --rebase
 )
 
 # add aurutils to local repo to ensure it is kept up to date
