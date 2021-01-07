@@ -11,6 +11,7 @@ cd /config/packages
 [[ "$DEBUG_ARCH_REPOS" == "1" ]] && echo "Checking $PACKAGE_REPO for updates"
 
 HOME=$(echo ~build) git fetch
+git clean -fd
 
 LOCAL=$(git rev-parse HEAD)
 REMOTE=$(git rev-parse @{u})
