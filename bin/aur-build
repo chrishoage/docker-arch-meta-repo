@@ -11,4 +11,5 @@ aur build -d $REPO_NAME \
   --noconfirm \
   --temp \
   --chroot \
+  --makepkg-conf /config/makepkg.conf \
   "$@"

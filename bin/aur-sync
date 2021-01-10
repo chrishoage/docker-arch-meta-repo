@@ -12,4 +12,5 @@ aur sync -d $REPO_NAME \
   --noview \
   --temp \
   --chroot \
+  --makepkg-conf /config/makepkg.conf \
   "$@"

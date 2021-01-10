@@ -41,13 +41,20 @@ Server = file:///config/repo
 " >> $chroot_pacman_conf
 fi
 
+chroot_makepkg_conf=/config/makepkg.conf
+
+if [ ! -f $chroot_makepkg_conf ]; then
+  echo "setting up $chroot_makepkg_conf"
+  cp /usr/share/devtools/makepkg-$(uname -m).conf $chroot_makepkg_conf
+fi
+
 pacsync $REPO_NAME
 
 chown -R build:build /config
 
-echo "setting up /config/packages"
-
 if [ ! -d /config/packages ]; then
+  echo "setting up /config/packages"
+
   (
     cd /config
     GIT_SSH_COMMAND="ssh -o 'StrictHostKeyChecking=accept-new'" \
