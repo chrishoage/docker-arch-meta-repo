@@ -1,5 +1,10 @@
 #!/usr/bin/with-contenv bash
 
+if [ -f /tmp/arch-packages.local ]; then
+  echo "removing /tmp/arch-packages.local found during init"
+  rm /tmp/arch-packages.local
+fi
+
 if [[ "$PACMAN_CACHE_SERVER" != "" ]]; then
   echo "setting up $PACMAN_CACHE_SERVER"
   echo "Server = $PACMAN_CACHE_SERVER" > /etc/pacman.d/mirrorlist
