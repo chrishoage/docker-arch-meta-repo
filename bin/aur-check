@@ -6,14 +6,28 @@ flock --exclusive --nonblock 3 || {
   exit 1
 }
 
+AURVCS=${AURVCS:-.*-(cvs|svn|git|hg|bzr|darcs)$}
+
 HOME=$(echo ~build)
 
 [[ "$DEBUG_ARCH_REPOS" == "1" ]] && echo "running HOME=$HOME aur sync -d $REPO_NAME -u $@"
 
-UPDATE_COUNT=$(aur repo -d $REPO_NAME --list | aur vercmp | wc -l)
+packages=()
 
-[[ "$DEBUG_ARCH_REPOS" == "1" ]] && echo "$UPDATE_COUNT updates avialible"
+# refresh vcs pkgs cache
+mapfile -t _packages < <(aur repo --list | cut -f1 | grep -E "$AURVCS")
+aur sync -d $REPO_NAME --chroot --no-ver --no-build --noview "${_packages[@]}"
 
-if [ "$UPDATE_COUNT" -gt "0" ]; then
-  aur-sync -u "$@"
+# get aur pkgs to update
+mapfile -t _packages < <(aur repo -u | cut -d' ' -f1)
+packages+=("${_packages[@]}")
+
+# get vcs pkgs to update
+mapfile -t _packages < <(aur vercmp-devel | cut -d' ' -f1)
+packages+=("${_packages[@]}")
+
+[[ "$DEBUG_ARCH_REPOS" == "1" ]] && echo "updating: ${packages[@]}"
+
+if ((${#packages[@]})); then
+  aur-sync --rebuild "${packages[@]}"
 fi

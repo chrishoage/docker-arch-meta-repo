@@ -41,7 +41,6 @@ ADD --chown=build:build https://aur.archlinux.org/cgit/aur.git/snapshot/aurutils
 RUN \
     cd /tmp \
     && echo "installing aurutils" \
-    && gpg --recv-keys DBE7D3DD8C81D58D0A13D0E76BC26A17B9B7018A \
     && tar xzf /tmp/aurutils.tar.gz \
     && cd aurutils \
     && makepkg --noconfirm --rmdeps -rsci \
