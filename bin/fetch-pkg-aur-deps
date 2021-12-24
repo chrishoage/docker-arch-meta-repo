@@ -5,5 +5,5 @@ set -e
 srcinfo-deps /config/packages/*/.SRCINFO \
     | sort \
     | uniq \
-    | aur query -t info \
+    | aur query -t info - \
     | jq '.results[].Name' -r
