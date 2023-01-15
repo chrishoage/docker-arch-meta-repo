@@ -1,3 +1,7 @@
+# ⚠ Notice ⚠
+
+This docker version was flaky due to trying to use systemd-nspawn in a container. I have [moved to build this using vagrant](https://github.com/chrishoage/vagrant-arch-meta-repo) in an arch linux Virtual Machine.
+
 # Docker Arch Meta Repo
 
 This container is uses an Arch base to build meta packages that have AUR depends
